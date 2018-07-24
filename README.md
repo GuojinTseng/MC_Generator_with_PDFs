@@ -1,1 +1,1 @@
-This is my FIRST monte carlo event generator
+This is my FIRST monte carlo event generator with PDFs
