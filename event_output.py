@@ -47,7 +47,7 @@ class Event_Output(object):
 			events.write("\n")
 			events.write("#*                                                *")
 			events.write("\n")
-			events.write("#*              All rights reserved.              *")
+			events.write("#*        Copyright (C) 2018 Guojin Tseng         *")
 			events.write("\n")
 			events.write("#*                                                *")
 			events.write("\n")
