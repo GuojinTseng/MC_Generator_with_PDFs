@@ -55,4 +55,4 @@ class Gen_Histogram(object):
 		# update the view limits
 		ax.set_xlim(left[0], right[-1])
 		ax.set_ylim(bottom.min(), top.max())
-		plt.savefig("/home/guojintseng/Desktop/MC_Event_Generator_with_PDF/fig/" + name + '.pdf')
+		plt.savefig("/home/guojintseng/Desktop/MC_Event_Generator_with_PDFs/fig/" + name + '.pdf')

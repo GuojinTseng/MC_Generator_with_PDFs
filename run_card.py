@@ -9,9 +9,9 @@
 # random seed
 seed = 520
 # number of generated events
-Nevents = 2000
+Nevents = 100000
 # number of sprinkled points
-N = 100
+N = 10000
 # PP COM energy in GeV
 ECM = 14000
 s = ECM**2

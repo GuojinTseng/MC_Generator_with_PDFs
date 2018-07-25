@@ -9,6 +9,8 @@
 #import guojin's module
 import calc_dsigma, param_card, run_card
 
+from numba import jit
+
 import math, os, sys
 import random
 
@@ -22,23 +24,22 @@ class Calc_Xsection(object):
 	def __init__(self):
 		self.dsig = calc_dsigma.Calc_Dsigma()
 
+
 	def weight(self, hats, mu, x1, x2, costh_ii):
 		# 1 for down-quarks, 2 for up, 3 for strange, 4 for charm and negative values for the corresponding anti-quarks. gluon is given by 21
-		qtype = 0 # up-type quarks
+		# up-type quarks
+		qtype = 0
 		w_ii = self.dsig.dsigma(costh_ii, hats, qtype) * ( lhapdf.xfx(x1, mu, 2) *  lhapdf.xfx(-x2, mu, 2) +  lhapdf.xfx(x1, mu, 4) *  lhapdf.xfx(-x2, mu, 4)  )
 		w_ii = w_ii + self.dsig.dsigma(-costh_ii, hats, qtype) *  ( lhapdf.xfx(-x1, mu, 2) *  lhapdf.xfx(x2, mu, 2) +  lhapdf.xfx(-x1, mu, 4) *  lhapdf.xfx(x2, mu, 4) )
-		qtype = 1 # down-type quarks
+		# down-type quarks
+		qtype = 1
 		w_ii = w_ii + self.dsig.dsigma(costh_ii, hats, qtype) * ( lhapdf.xfx(x1, mu, 1) *  lhapdf.xfx(-x2, mu, 1) +  lhapdf.xfx(x1, mu, 3) *  lhapdf.xfx(-x2, mu, 3) )
 		w_ii = w_ii + self.dsig.dsigma(-costh_ii, hats, qtype) * ( lhapdf.xfx(-x1, mu, 1) *  lhapdf.xfx(x2, mu, 1) +  lhapdf.xfx(-x1, mu, 3) *  lhapdf.xfx(x2, mu, 3) )
 		# multiply by ranges and Jacobian, divide by the x1 and x2 since xfxaQ gives x * f(x)
 		return w_ii
 
+	# @jit
 	def xsec(self):
-		# print "The e+e- center-of-momentum frame energy: ", run_card.run_card.ECM, "GeV"
-		#
-		# print '\n'
-
-		## Print some stuff
 		print '\n'
 		print '----====================================================----'
 		print 'pp --> Z --> mu+ mu-'
@@ -48,9 +49,6 @@ class Calc_Xsection(object):
 		random.seed(run_card.seed)
 
 		print "hadron com energy:", run_card.ECM, "GeV"
-
-		seed = 12342
-		random.seed(seed)
 
 		# choose the transform mass and width
 		MTR = param_card.Q_min
@@ -72,12 +70,12 @@ class Calc_Xsection(object):
 
 		# also define maximum point variable
 		w_max = 0
-		costh_max = -2 # so that it is obvious when something goes wrong!
-		Q_max = -1 # so that it is obvious when something goes wrong!
+		costh_max = 0
+		Q_max = 0
 
 		print 'integrating for cross section and maximum!'
 		print '...'
-		for ii in range(0,run_card.N):
+		for ii in range(0, run_card.N):
 			# random costheta and rho
 			costh_ii = -1 + random.random() * deltath
 			rho = rho1 + random.random() * deltarho

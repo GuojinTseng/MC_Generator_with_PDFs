@@ -23,14 +23,16 @@ class Event_Generator(object):
 		self.dsig = calc_dsigma.Calc_Dsigma()
 		self.eoutput = event_output.Event_Output()
 
+
 	def boost(self, fourvector, beta):
 		gamma = math.sqrt(1 / (1 - beta**2))
 		boosted_vector = [gamma * fourvector[0] - gamma * beta * fourvector[3], fourvector[1], fourvector[2], - gamma * beta * fourvector[0] + gamma * fourvector[3]]
 		return boosted_vector
 
+
 	def weight(self, hats, mu, x1, x2, costh_i):
 		'''
-		1 for down-quarks, 2 for up, 3 for strange, 
+		1 for down-quarks, 2 for up, 3 for strange,
 		4 for charm and negative values for the corresponding anti-quarks. gluon is given by 21
 		'''
 		# up-type quarks
@@ -42,6 +44,7 @@ class Event_Generator(object):
 		w_i = w_i + self.dsig.dsigma(costh_i, hats, qtype) * ( lhapdf.xfx(x1, mu, 1) *  lhapdf.xfx(-x2, mu, 1) +  lhapdf.xfx(x1, mu, 3) *  lhapdf.xfx(-x2, mu, 3) )
 		w_i = w_i + self.dsig.dsigma(-costh_i, hats, qtype) * ( lhapdf.xfx(-x1, mu, 1) *  lhapdf.xfx(x2, mu, 1) +  lhapdf.xfx(-x1, mu, 3) *  lhapdf.xfx(x2, mu, 3) )
 		return w_i
+
 
 	def generator(self, w_max):
 		delta_th = 2
@@ -65,7 +68,7 @@ class Event_Generator(object):
 		i = 0
 
 		self.eoutput.output_headers()
-		
+
 		while i < run_card.Nevents:
 			# generate random cos(theta) and rho
 			costh_i = -1 + random.random() * delta_th
@@ -95,7 +98,7 @@ class Event_Generator(object):
 			# if the random number is less than the probability of the S point
 			# accept
 
-			n = i/500
+			n = i/5000
 
 			if rand_num < prob:
 				i = i + 1
@@ -126,8 +129,7 @@ class Event_Generator(object):
 
 				self.eoutput.output(i, pq1, pq2, pem, pep)
 
-				if n < i/500:
+				if n < i/5000:
 					print 100. * float(i)/run_card.Nevents, "%% events has been generated."
-					# print i
 
 		return costh_list, SQ, Sy
